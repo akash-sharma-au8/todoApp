@@ -27,9 +27,12 @@ const TodoContainer = () => {
           "description": todoDesc
         })
       })
-
-      const data = await response.json()
-      alert(data.msg)
+      const data = await response.json() 
+      if(response.status === 200){
+        alert(data.msg)
+      }else{
+        alert(data.error)
+      }
       getTodo()
     }
     catch (e) {
