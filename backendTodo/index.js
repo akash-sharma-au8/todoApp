@@ -1,10 +1,11 @@
 const express = require("express")
 const { createTodo, updateTodo } = require("./types")
 const { Todos } = require("./db")
-
+const cors = require("cors");
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 app.post("/todo", async (req,res) => {
     const todo = req.body;
@@ -63,4 +64,6 @@ app.get("/todos", async(req,res) => {
 })
 
 
-app.listen(3000)
+app.listen(3001, () => {
+    console.log('Server is running on port 3001');
+  });
