@@ -16,7 +16,7 @@ app.post("/todo", async (req,res) => {
     }
 
     await Todos.create(todo);
-    res.json({"msg":"Todo created Successfully"})
+    res.status(200).json({"msg":"Todo created Successfully"})
 })
 
 app.post("/completed/:id", async (req,res) => {
@@ -43,7 +43,7 @@ app.get("/completed", async (req,res) => {
 
    try{
        const todos = await Todos.find({isCompleted : true})
-       res.status(201).json({
+       res.status(200).json({
         "completedTodos":todos
        })
    } 
@@ -57,9 +57,9 @@ app.get("/completed", async (req,res) => {
 app.get("/todos", async(req,res) => {    
     try{
         const todos = await Todos.find({})
-        res.json({"ToDos": todos })
+        res.status(200).json({"ToDos": todos })
     }catch(e){
-        res.send("Internal Server Error")
+        res.status(500).json("Internal Server Error")
     }
 })
 
