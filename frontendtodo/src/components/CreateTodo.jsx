@@ -1,6 +1,8 @@
 import React from 'react'
 
-const CreateTodo = ({handleFormSubmit, setTodoTitle, setTodoDesc, todoTitle, todoDesc}) => {
+const CreateTodo = (props) => {
+
+    const {handleFormSubmit, setTodoTitle, setTodoDesc, todoTitle, todoDesc} = props
 
     const handleTitleInput = (e) => {
         setTodoTitle(e.target.value)
@@ -12,8 +14,8 @@ const CreateTodo = ({handleFormSubmit, setTodoTitle, setTodoDesc, todoTitle, tod
   return (
     <div>
         <form onSubmit={handleFormSubmit}>
-            <input type = 'text' value = {todoTitle} onChange={(e) => handleTitleInput(e)} />
-            <input type = 'text' value = {todoDesc} onChange={(e) => handleDescInput(e)} />
+            <input type = 'text' value = {todoTitle} placeholder='Title' onChange={(e) => handleTitleInput(e)} />
+            <input type = 'text' value = {todoDesc} placeholder='Description' onChange={(e) => handleDescInput(e)} />
             <button type='submit'>Add Todo</button>
       </form>
     </div>

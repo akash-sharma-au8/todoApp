@@ -11,20 +11,25 @@ const TodoContainer = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     addTodo();
+    setTodoTitle("")
+    setTodoDesc("")
   }
 
   const addTodo = async () => {
     try {
-      const response = await fetch("https:localhost:3000/todo", {
+      const response = await fetch("http://localhost:3001/todo", {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           "title": todoTitle,
           "description": todoDesc
         })
       })
 
-      const data = response.json()
-      console.log(data)
+      const data = await response.json()
+      alert(data.msg)
       getTodo()
     }
     catch (e) {
@@ -32,20 +37,49 @@ const TodoContainer = () => {
     }
   }
 
- 
+
   const getTodo = async () => {
     try {
-      const response = await fetch("https:localhost:3000/todos", {
-        method: 'GET'
+      const response = await fetch("http://localhost:3001/todos", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
 
-      const data = response.json()
-      console.log(data)
+      const data = await response.json();
+      setTodos(data.ToDos)
     }
 
     catch (e) {
-
+      console.log("Error fetching todos")
     }
+  }
+
+  const updateTodo =  async (id) => {
+    const todo = todos.find((todo) => todo._id === id)
+    try {
+      const response = await fetch(`http://localhost:3001/completed/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "isCompleted": todo.isCompleted ? false : true,
+        })
+      })
+
+      const data = await response.json()
+      getTodo()
+    }
+    catch (e) {
+      console.log(e.error)
+    }
+  }
+  const deleteTodo =  async (id) => {
+    const newTodos = todos.filter((todo) => todo._id != id)
+    setTodos(newTodos)
+    
   }
 
   useEffect(() => {
@@ -54,13 +88,12 @@ const TodoContainer = () => {
 
   return (
     <div>
-      <CreateTodo setTodoTitle={setTodoTitle}  todoTitle = {todoTitle} todoDesc={todoDesc} setTodoDesc={setTodoDesc} handleFormSubmit={handleFormSubmit} />
+      <CreateTodo setTodoTitle={setTodoTitle} todoTitle={todoTitle} todoDesc={todoDesc} setTodoDesc={setTodoDesc} handleFormSubmit={handleFormSubmit} updateTodo={updateTodo} />
       {
-        todoDesc.length > 0 && (
-          <TodoList todos={todos} />
+        todos.length > 0 && (
+          <TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo}/>
         )
       }
-      <TodoList />
     </div>
   )
 }
